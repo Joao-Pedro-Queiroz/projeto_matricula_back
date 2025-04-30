@@ -19,12 +19,12 @@ public class MatriculaService {
     @Autowired
     private CursoService cursoService;
 
-    public RetornarMatriculaDTO salvarMatricula(String token, CadastrarMatriculaDTO dto, String emailAluno){
+    public RetornarMatriculaDTO salvarMatricula(String token, CadastrarMatriculaDTO dto){
         Curso curso = cursoService.getCurso(token, dto.idCurso());
 
         Matricula matricula = new Matricula();
         matricula.setDataMatricula(LocalDate.now());
-        matricula.setEmailAluno(emailAluno);
+        matricula.setEmailAluno(dto.emailAluno());
         matricula.setIdCurso(dto.idCurso());
         matricula.setStatus(dto.status());
 

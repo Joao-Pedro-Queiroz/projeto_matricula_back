@@ -36,9 +36,8 @@ public class MatriculaController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestBody CadastrarMatriculaDTO dto
     ) {
-        String email = jwt.getClaimAsString("https://musica-insper.com/email");
         String token = jwt.getTokenValue();
-        return matriculaService.salvarMatricula(token, dto, email);
+        return matriculaService.salvarMatricula(token, dto);
     }
 
     /**
