@@ -1,4 +1,7 @@
 package br.insper.matricula.matricula;
 
-public record CadastrarMatriculaDTO(String id, String motivoCancelamento) {
+public record CadastrarMatriculaDTO(
+        String emailAluno,
+        String idCurso,
+        String status ) {
 }
