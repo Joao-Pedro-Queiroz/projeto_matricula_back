@@ -19,24 +19,22 @@ public class MatriculaService {
     @Autowired
     private CursoService cursoService;
 
-    public Matricula salvarMatricula(String token, CadastrarMatriculaDTO dto){
+    public RetornarMatriculaDTO salvarMatricula(String token, CadastrarMatriculaDTO dto, String emailAluno){
         Curso curso = cursoService.getCurso(token, dto.idCurso());
 
         Matricula matricula = new Matricula();
         matricula.setDataMatricula(LocalDate.now());
-        matricula.setEmailAluno(dto.emailAluno());
+        matricula.setEmailAluno(emailAluno);
         matricula.setIdCurso(dto.idCurso());
         matricula.setStatus(dto.status());
 
-        matriculaRepository.save(matricula);
-        return matricula;
+        matricula = matriculaRepository.save(matricula);
+        return new RetornarMatriculaDTO(matricula.getId(), matricula.getEmailAluno(), matricula.getIdCurso(), matricula.getDataMatricula(), matricula.getStatus(), matricula.getMotivoCancelamento(), matricula.getDataCancelamento());
     }
 
-    public Matricula findById(String email, List<String> roles, String id){
-        if (roles.contains("ADMIN")){
-            matriculaRepository.findById(id).get();
-        }
-        return matriculaRepository.findByemailAlunoAndIdCurso(email, id);
+    public Matricula findById(String id){
+        return matriculaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public List<Matricula> list(String email, List<String> roles, String idCurso) {
@@ -45,19 +43,20 @@ public class MatriculaService {
             return matriculaRepository.findByidCurso(idCurso);
         }
 
-        return matriculaRepository.findByemailAlunoAndidCurso(email, idCurso);
+        return matriculaRepository.findByEmailAluno(email);
     }
 
-    public void cancelarMatricula(String email, List<String> roles, CancelarMatriculaDTO dto) {
+    public RetornarMatriculaDTO cancelarMatricula(String email, List<String> roles, CancelarMatriculaDTO dto, String id) {
 
-        List<Matricula> lista_matriculas = matriculaRepository.findByemailAlunoAndidCurso(email, dto.id());
-        Matricula matricula = matriculaRepository.findById(dto.id()).get();
+        List<Matricula> lista_matriculas = matriculaRepository.findByEmailAluno(email);
+        Matricula matricula = findById(id);
 
         if (roles.contains("ADMIN") || lista_matriculas.contains(matricula)) {
             matricula.setStatus("CANCELADO");
             matricula.setDataCancelamento(LocalDate.now());
             matricula.setMotivoCancelamento(dto.motivoCancelamento());
-            matriculaRepository.save(matricula);
+            matricula = matriculaRepository.save(matricula);
+            return new RetornarMatriculaDTO(matricula.getId(), matricula.getEmailAluno(), matricula.getIdCurso(), matricula.getDataMatricula(), matricula.getStatus(), matricula.getMotivoCancelamento(), matricula.getDataCancelamento());
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -66,7 +65,7 @@ public class MatriculaService {
     }
 
     public void delete(String id) {
-        Matricula matricula = matriculaRepository.findById(id).get();
+        Matricula matricula = findById(id);
         if (!matricula.status.equals("EM_ANDAMENTO") ){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }else {

@@ -26,36 +26,34 @@ public class MatriculaController {
 
     @GetMapping("/{id}")
     public Matricula getById(
-            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String id
     ) {
-        String email = jwt.getClaimAsString("https://musica-insper.com/email");
-        List<String> roles = jwt.getClaimAsStringList("https://musica-insper.com/roles");
-        return matriculaService.findById(email, roles, id);
+        return matriculaService.findById(id);
     }
 
     @PostMapping
-    public Matricula create(
+    public RetornarMatriculaDTO create(
             @AuthenticationPrincipal Jwt jwt,
             @RequestBody CadastrarMatriculaDTO dto
     ) {
-        // passamos o token bruto para permitir ao serviço consultar o curso
+        String email = jwt.getClaimAsString("https://musica-insper.com/email");
         String token = jwt.getTokenValue();
-        return matriculaService.salvarMatricula(token, dto);
+        return matriculaService.salvarMatricula(token, dto, email);
     }
 
     /**
      * Cancela uma matrícula (marca status=CANCELADO).
      * Só ADMIN ou dono da matrícula podem cancelar.
      */
-    @PostMapping("/cancelar")
-    public void cancelar(
+    @PutMapping("/cancelar/{id}")
+    public RetornarMatriculaDTO cancelar(
             @AuthenticationPrincipal Jwt jwt,
-            @RequestBody CancelarMatriculaDTO dto
+            @RequestBody CancelarMatriculaDTO dto,
+            @PathVariable String id
     ) {
         String email = jwt.getClaimAsString("https://musica-insper.com/email");
         List<String> roles = jwt.getClaimAsStringList("https://musica-insper.com/roles");
-        matriculaService.cancelarMatricula(email, roles, dto);
+        return matriculaService.cancelarMatricula(email, roles, dto, id);
     }
 
     /**
