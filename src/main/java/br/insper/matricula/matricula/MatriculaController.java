@@ -14,6 +14,15 @@ public class MatriculaController {
     @Autowired
     private MatriculaService matriculaService;
 
+    @PostMapping
+    public RetornarMatriculaDTO create(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody CadastrarMatriculaDTO dto
+    ) {
+        String token = jwt.getTokenValue();
+        return matriculaService.salvarMatricula(token, dto);
+    }
+
     @GetMapping("/{idCurso}")
     public List<Matricula> list(
             @AuthenticationPrincipal Jwt jwt,
@@ -31,14 +40,6 @@ public class MatriculaController {
         return matriculaService.findById(id);
     }
 
-    @PostMapping
-    public RetornarMatriculaDTO create(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody CadastrarMatriculaDTO dto
-    ) {
-        String token = jwt.getTokenValue();
-        return matriculaService.salvarMatricula(token, dto);
-    }
 
     /**
      * Cancela uma matrícula (marca status=CANCELADO).

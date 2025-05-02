@@ -93,10 +93,11 @@ public class MatriculaServiceTests {
     }
 
     @Test
-    void test_findAllMatriculaByEmailAlunoSuccesfully() {
+    void test_findAllMatriculaByEmailAlunoAndIdCursoSuccesfully() {
+        String idCurso = "123";
         String emailAluno = "teste@gmail.com";
 
-        Mockito.when(matriculaRepository.findByEmailAluno(emailAluno)).thenReturn(new ArrayList<>());
+        Mockito.when(matriculaRepository.findByEmailAlunoAndIdCurso(emailAluno, idCurso)).thenReturn(new ArrayList<>());
 
         List<String> roles = new ArrayList<>();
 
