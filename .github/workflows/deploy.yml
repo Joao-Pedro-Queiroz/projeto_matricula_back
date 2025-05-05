@@ -49,4 +49,4 @@ jobs:
         script: |
           docker stop matricula
           docker rm --force matricula
-          docker run -d -p 8082:8082 -e REDIS_HOST=redis -e string_conexao_MongoDB_biblioteca=${{ secrets.string_conexao_MongoDB_biblioteca }} --name matricula --network=rede jpqv/matricula-ci:${{ github.sha }}
+          docker run -d -p 8082:8082 -e string_conexao_MongoDB_biblioteca=${{ secrets.string_conexao_MongoDB_biblioteca }} --name matricula --network=rede jpqv/matricula-ci:${{ github.sha }}
