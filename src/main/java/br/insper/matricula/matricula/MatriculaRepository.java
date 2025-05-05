@@ -7,6 +7,7 @@ import java.util.List;
 
 @Repository
 public interface MatriculaRepository extends MongoRepository<Matricula, String> {
-    List<Matricula> findByEmailAluno(String email);
+    List<Matricula> findByEmailAluno(String emailAluno);
+    List<Matricula> findByEmailAlunoAndIdCurso(String emailAluno, String idCurso);
     List<Matricula> findByidCurso(String idCurso);
 }

@@ -32,18 +32,18 @@ public class MatriculaService {
         return new RetornarMatriculaDTO(matricula.getId(), matricula.getEmailAluno(), matricula.getIdCurso(), matricula.getDataMatricula(), matricula.getStatus(), matricula.getMotivoCancelamento(), matricula.getDataCancelamento());
     }
 
-    public Matricula findById(String id){
-        return matriculaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
     public List<Matricula> list(String email, List<String> roles, String idCurso) {
 
         if (roles.contains("ADMIN")) {
             return matriculaRepository.findByidCurso(idCurso);
         }
 
-        return matriculaRepository.findByEmailAluno(email);
+        return matriculaRepository.findByEmailAlunoAndIdCurso(email, idCurso);
+    }
+
+    public Matricula findById(String id){
+        return matriculaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public RetornarMatriculaDTO cancelarMatricula(String email, List<String> roles, CancelarMatriculaDTO dto, String id) {

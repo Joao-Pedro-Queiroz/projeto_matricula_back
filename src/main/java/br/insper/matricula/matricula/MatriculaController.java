@@ -1,6 +1,7 @@
 package br.insper.matricula.matricula;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,17 @@ public class MatriculaController {
     @Autowired
     private MatriculaService matriculaService;
 
-    @GetMapping("/{idCurso}")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public RetornarMatriculaDTO create(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody CadastrarMatriculaDTO dto
+    ) {
+        String token = jwt.getTokenValue();
+        return matriculaService.salvarMatricula(token, dto);
+    }
+
+    @GetMapping("/curso/{idCurso}")
     public List<Matricula> list(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable String idCurso
@@ -31,14 +42,6 @@ public class MatriculaController {
         return matriculaService.findById(id);
     }
 
-    @PostMapping
-    public RetornarMatriculaDTO create(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody CadastrarMatriculaDTO dto
-    ) {
-        String token = jwt.getTokenValue();
-        return matriculaService.salvarMatricula(token, dto);
-    }
 
     /**
      * Cancela uma matrícula (marca status=CANCELADO).
