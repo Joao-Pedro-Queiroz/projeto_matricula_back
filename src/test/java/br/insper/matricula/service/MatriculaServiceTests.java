@@ -41,10 +41,12 @@ public class MatriculaServiceTests {
         matricula.setStatus("EM_ANDAMENTO");
 
         Curso curso = new Curso();
+        curso.setId("123");
         curso.setTitulo("CCOMP");
         curso.setDescricao("Teste");
-        curso.setHoras(120.0f);
+        curso.setCargaHoraria(120);
         curso.setInstrutor("Teste");
+        curso.setEmailCriador("teste@gmail.com");
 
         CadastrarMatriculaDTO postDTO = new CadastrarMatriculaDTO(matricula.getEmailAluno(), matricula.getIdCurso(), matricula.getStatus());
 
