@@ -14,7 +14,7 @@ public class CursoService {
     public Curso getCurso(String token, String id) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http:/Rota:porta/cursos/" + id;
+        String url = "http://54.232.22.180:8080/api/cursos/" + id;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token); // ou "Bearer " + token, se for o caso
