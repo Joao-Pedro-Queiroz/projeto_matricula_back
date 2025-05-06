@@ -17,11 +17,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*") // ou "http://localhost:5173" se quiser limitar
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+        registry.addMapping("/**").allowedMethods("*");
     }
 
     @Bean
