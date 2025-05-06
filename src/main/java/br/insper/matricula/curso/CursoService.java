@@ -17,7 +17,7 @@ public class CursoService {
         String url = "http://54.232.22.180:8080/api/cursos/" + id;
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token); // ou "Bearer " + token, se for o caso
+        headers.set("Authorization", "Bearer " + token); // ou "Bearer " + token, se for o caso
 
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
